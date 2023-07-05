@@ -2,7 +2,7 @@
 
 Custom [Newman](https://github.com/postmanlabs/newman) reporter to send message to [Slack](https://slack.com/)
 
-<img src="https://github.com/stephenwang1011/newman-reporter-slackmsg/blob/master/testResults.png?raw=true" width="450"  height="550">
+<img src="https://github.com/stephenwang1011/newman-reporter-slackmsg/blob/master/testResults.png?raw=true">
 
 ## Before you get started
 - Install [Newman](https://github.com/postmanlabs/newman) ``` $ npm run i -g newman ```
@@ -29,8 +29,9 @@ or
 ```
  --reporter-slackreporter-messageSize '<messageSize>' e.g 150
  --reporter-slackreporter-token '<bearer token>' e.g xoxb-XXXXXXXXXXXX-TTTTTTTTTTTTTT
- --reporter-slackreporter-chanel '<channel>' e.g #general
- --reporter-slackreporter-buildurl '<buildurl>' e.g ci build url 
+ --reporter-slackreporter-channel '<channel>' e.g #general
+ --reporter-slackreporter-buildurl '<buildurl>' e.g ci build url
+ --reporter-slackreporter-failureOnly '<boolean>' e.g true
 ```
 
 
@@ -55,3 +56,6 @@ Option to select channel or user receive the result
 
 **buildurl**
 The circle ci build url, you can invoke the variable ${CIRCLE_BUILD_URL} 
+
+**failureOnly**
+Option to only send Slack message if failures occur. Default to false

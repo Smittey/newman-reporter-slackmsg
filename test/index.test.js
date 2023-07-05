@@ -6,7 +6,12 @@ jest.mock('../slackUtils');
 
 describe('SlackNewmanReporter', () => {
     let mockEmitter;
-    const summary = {run: { stats: '', failures: {}, timings: {}}}
+    const mockStats = {
+        requests: { total: 4, pending: 0, failed: 1 },
+        assertions: { total: 2, failed: 1 }
+    }
+
+    const summary = {run: { stats: mockStats, failures: [{name: 'failed test 1'}], timings: {}}}
 
     beforeEach(() => {
         mockEmitter = new events.EventEmitter();
@@ -65,6 +70,24 @@ describe('SlackNewmanReporter', () => {
         expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
 
+    test('should not start slack reporter if no failures and failureOnly flag set to true', () => {
+        const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
+
+        const summaryNoFailures = {
+            ...summary,
+            run: {
+                ...summary.run,
+                failures: [],
+            },
+        }
+
+        slackNewmanReporter(mockEmitter, {webhookurl: 'https://slack.com/api/chat.postMessage', token: 'testtoken', channel: 'testchannel', failureOnly: true}, {});
+        mockEmitter.emit('done', '', summaryNoFailures);
+
+        expect(slackUtils.send).not.toHaveBeenCalled();
+        expect(slackUtils.slackMessage).not.toHaveBeenCalled();
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
 
     afterEach(() => {
         jest.clearAllMocks();
